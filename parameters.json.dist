@@ -1,0 +1,7 @@
+{
+  "centrifugo": {
+    "secret": "some-secret-key",
+    "url": "http://localhost",
+    "wsUrl": "ws://localhost/connection/websocket"
+  }
+}
