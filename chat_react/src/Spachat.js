@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Auth from './Auth';
 import Chat from './Chat';
 import Profile from './Profile';
+import ChatTransport from './ChatTransport';
 
 const ViewEnum = {
     AUTH: 0,
@@ -10,6 +11,7 @@ const ViewEnum = {
 };
 
 class Spachat extends Component {
+
     constructor()
     {
         super();
@@ -19,8 +21,12 @@ class Spachat extends Component {
         this.state = {
             currentUserData: {userName: '', message: ''},
             messages: [],
-            currentView: ViewEnum.AUTH
+            currentView: ViewEnum.AUTH,
         };
+
+        this.chatTransport = new ChatTransport(function(messageData) {
+            this.setState({messages: [...this.state.messages, {userName: messageData.userName, message: messageData.message}]});
+        }.bind(this));
 
         this.handleUserNameInput = this.handleUserNameInput.bind(this);
         this.handleMessageInput = this.handleMessageInput.bind(this);
@@ -55,7 +61,8 @@ class Spachat extends Component {
     {
         if (this.state.currentUserData.message !== '')
         {
-            this.setState({messages: [...this.state.messages, this.state.currentUserData], currentUserData: {...this.state.currentUserData, message: ''}});
+            this.chatTransport.publish(this.state.currentUserData);
+            this.setState({currentUserData: {...this.state.currentUserData, message: ''}});
         }
         else
         {
