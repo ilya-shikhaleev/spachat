@@ -14,26 +14,33 @@ class Spachat extends Component {
     {
         super();
         /**
-         * @type {{currentUser: {userName: string}, messages: {userName: string, message: string}[], currentView: int}}
+         * @type {{currentUserData: {userName: string}, messages: {userName: string, message: string}[], currentView: int}}
          */
         this.state = {
-            currentUser: {userName: ''},
+            currentUserData: {userName: '', message: ''},
             messages: [],
             currentView: ViewEnum.AUTH
         };
 
-        this.handleInput = this.handleInput.bind(this);
+        this.handleUserNameInput = this.handleUserNameInput.bind(this);
+        this.handleMessageInput = this.handleMessageInput.bind(this);
         this.handleLoginButtonClicked = this.handleLoginButtonClicked.bind(this);
+        this.handleSendClicked = this.handleSendClicked.bind(this);
     }
 
-    handleInput(event)
+    handleUserNameInput(event)
     {
-        this.setState({currentUser: {userName: event.target.value}});
+        this.setState({currentUserData: {userName: event.target.value, message: this.state.currentUserData.message}});
+    }
+
+    handleMessageInput(event)
+    {
+        this.setState({currentUserData: {userName: this.state.currentUserData.userName, message: event.target.value}});
     }
 
     handleLoginButtonClicked()
     {
-        let name = this.state.currentUser.userName;
+        let name = this.state.currentUserData.userName;
         if (name !== '')
         {
             this.setState({currentView: ViewEnum.CHAT});
@@ -44,12 +51,32 @@ class Spachat extends Component {
         }
     }
 
+    handleSendClicked()
+    {
+        if (this.state.currentUserData.message !== '')
+        {
+            this.setState({messages: [...this.state.messages, this.state.currentUserData], currentUserData: {...this.state.currentUserData, message: ''}});
+        }
+        else
+        {
+            alert('Error: empty message!');
+        }
+    }
+
+    renderChat = () => (
+    <Chat {...{
+        onMessageChange: this.handleMessageInput,
+        currentMessage: this.state.currentUserData.message,
+        onSendClick: this.handleSendClicked,
+        messages: this.state.messages
+    }} />);
+
     render()
     {
         let view = this.state.currentView;
         return (
-        ((view === ViewEnum.AUTH) && <Auth onNameChange={this.handleInput} userName={this.state.currentUser.userName} onLoginClick={this.handleLoginButtonClicked} />) ||
-        ((view === ViewEnum.CHAT) && <Chat />) ||
+        ((view === ViewEnum.AUTH) && <Auth onNameChange={this.handleUserNameInput} userName={this.state.currentUserData.userName} onLoginClick={this.handleLoginButtonClicked} />) ||
+        ((view === ViewEnum.CHAT) && this.renderChat()) ||
         ((view === ViewEnum.PROFILE) && <Profile />)
         )
     }
