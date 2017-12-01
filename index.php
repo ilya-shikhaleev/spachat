@@ -12,10 +12,11 @@ $timestamp = $time;
 $token = $client->setSecret($centrifugoParams['secret'])->generateClientToken($userId, $timestamp);
 
 header('Content-type: application/json');
+header('Access-Control-Allow-Origin: *');
 
 echo json_encode([
     'token' => $token,
     'userId' => $userId,
-    'timestamp' => $timestamp,
+    'timestamp' => (string) $timestamp,
     'centrifugoUrl' => $centrifugoParams['wsUrl'],
 ]);
