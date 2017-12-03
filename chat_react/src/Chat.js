@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton'
 
-const MessageField = ({onChange, message}) => <input onChange={(e) => onChange(e)} type="text" name="name" value={message} />;
-const SendButton = ({onClick}) => <button id="submit" onClick={(e) => onClick()}>Send message</button>;
+const MessageField = ({onChange, message, errorText}) => <TextField errorText={errorText} className="message-text" onChange={(e) => onChange(e)} value={message} fullWidth={true} />;
+const SendButton = ({onClick}) => <RaisedButton className="send-button" onClick={(e) => onClick()} label="Send message" />;
 const RenderMessages = (messages) => {
 
     let messageRows = [];
@@ -12,12 +14,12 @@ const RenderMessages = (messages) => {
     return <div className="chat-massages-pane">{messageRows}</div>;
 };
 
-const Chat = ({onMessageChange, currentMessage, onSendClick, messages}) => {
+const Chat = ({onMessageChange, currentMessage, onSendClick, messages, errorText}) => {
     return (
     <div className="chat">
         {RenderMessages(messages)}
         <div className="chat-input-form">
-            <MessageField onChange={onMessageChange} message={currentMessage} />
+            <MessageField errorText={errorText} onChange={onMessageChange} message={currentMessage} />
             <SendButton onClick={onSendClick} />
         </div>
     </div>

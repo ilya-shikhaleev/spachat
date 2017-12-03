@@ -3,6 +3,9 @@ import Auth from './Auth';
 import Chat from './Chat';
 import Profile from './Profile';
 import ChatTransport from './ChatTransport';
+import Paper from 'material-ui/Paper'
+import AppBar from 'material-ui/AppBar'
+import './App.css'
 
 const ViewEnum = {
     AUTH: 0,
@@ -22,6 +25,7 @@ class Spachat extends Component {
             currentUserData: {userName: '', message: ''},
             messages: [],
             currentView: ViewEnum.AUTH,
+            errorText: ''
         };
 
         this.chatTransport = new ChatTransport(function(messageData) {
@@ -36,12 +40,12 @@ class Spachat extends Component {
 
     handleUserNameInput(event)
     {
-        this.setState({currentUserData: {userName: event.target.value, message: this.state.currentUserData.message}});
+        this.setState({currentUserData: {userName: event.target.value, message: this.state.currentUserData.message}, errorText: ''});
     }
 
     handleMessageInput(event)
     {
-        this.setState({currentUserData: {userName: this.state.currentUserData.userName, message: event.target.value}});
+        this.setState({currentUserData: {userName: this.state.currentUserData.userName, message: event.target.value}, errorText: ''});
     }
 
     handleLoginButtonClicked()
@@ -49,11 +53,11 @@ class Spachat extends Component {
         let name = this.state.currentUserData.userName;
         if (name !== '')
         {
-            this.setState({currentView: ViewEnum.CHAT});
+            this.setState({currentView: ViewEnum.CHAT, errorText: ''});
         }
         else
         {
-            alert('Error: empty name!');
+            this.setState({errorText: 'Error: empty name!'});
         }
     }
 
@@ -62,11 +66,11 @@ class Spachat extends Component {
         if (this.state.currentUserData.message !== '')
         {
             this.chatTransport.publish(this.state.currentUserData);
-            this.setState({currentUserData: {...this.state.currentUserData, message: ''}});
+            this.setState({currentUserData: {...this.state.currentUserData, message: ''}, errorText: ''});
         }
         else
         {
-            alert('Error: empty message!');
+            this.setState({errorText: 'Error: empty message!'});
         }
     }
 
@@ -75,16 +79,35 @@ class Spachat extends Component {
         onMessageChange: this.handleMessageInput,
         currentMessage: this.state.currentUserData.message,
         onSendClick: this.handleSendClicked,
-        messages: this.state.messages
+        messages: this.state.messages,
+        errorText: this.state.errorText
     }} />);
 
-    render()
-    {
-        let view = this.state.currentView;
+    renderAuth = () => (
+        <Auth
+            onNameChange={this.handleUserNameInput}
+            userName={this.state.currentUserData.userName}
+            onLoginClick={this.handleLoginButtonClicked}
+            errorText={this.state.errorText}
+        />
+    );
+
+    renderProfile = () => (<Profile />);
+
+    getView = (viewId) => (
+        ((viewId === ViewEnum.AUTH) && this.renderAuth()) ||
+        ((viewId === ViewEnum.CHAT) && this.renderChat()) ||
+        ((viewId === ViewEnum.PROFILE) && this.renderProfile())
+    );
+
+    render() {
         return (
-        ((view === ViewEnum.AUTH) && <Auth onNameChange={this.handleUserNameInput} userName={this.state.currentUserData.userName} onLoginClick={this.handleLoginButtonClicked} />) ||
-        ((view === ViewEnum.CHAT) && this.renderChat()) ||
-        ((view === ViewEnum.PROFILE) && <Profile />)
+            <Paper className="main-container" zDepth={1}>
+                <AppBar
+                    title="Spachat"
+                />
+                {this.getView(this.state.currentView)}
+            </Paper>
         )
     }
 }

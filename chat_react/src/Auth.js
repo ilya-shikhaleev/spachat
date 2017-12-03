@@ -1,16 +1,19 @@
 import React, {Component} from 'react';
-import './App.css';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton'
 
-const NameField = ({onChange, userName}) => <input onChange={(e) => onChange(e)} type="text" name="name" value={userName} />;
-const LoginButton = ({onClick}) => <button id="submit" onClick={(e) => onClick()}>Enter chat</button>;
-const Auth = ({onNameChange, userName, onLoginClick}) => (
+const NameField = ({onChange, userName, errorText}) => <TextField errorText={errorText} onChange={(e) => onChange(e)} type="text" value={userName} />;
+const LoginButton = ({onClick}) => <RaisedButton className="login-button" onClick={(e) => onClick()} label='Enter chat'/>;
+const Auth = ({onNameChange, userName, onLoginClick, errorText}) => (
     <div className="auth">
-        <div className="auth-form">
-            <NameField onChange={onNameChange} userName={userName}/>
-            <LoginButton onClick={onLoginClick}/>
+        <div>
+            Enter your name
         </div>
-        <div className="auth-data">
-            {userName}
+        <div>
+            <NameField errorText={errorText} onChange={onNameChange} userName={userName}/>
+        </div>
+        <div>
+            <LoginButton onClick={onLoginClick}/>
         </div>
     </div>
 );
