@@ -1,16 +1,11 @@
-* {
-    box-sizing: border-box;
-}
-
-body, html, .root {
+body, html {
     height: 100%
 }
 
 .main-container {
-    width: 50%;
-    margin: 0 auto;
-    height: 100%;
-    min-width: 600px;
+    width: 600px;
+    margin: 40px auto 0;
+    height: 800px;
 }
 
 .auth{
@@ -18,24 +13,19 @@ body, html, .root {
 }
 
 .chat {
-    height: 100%;
-    width: 50%;
-    position: absolute;
-    bottom: 0;
 }
 
 .chat-input-form {
     padding: 20px;
     box-sizing: border-box;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
+    width: 600px;
+    height: 100px;
 }
 
 .chat-massages-pane {
     padding: 20px;
     box-sizing: border-box;
-    width: 100%;
-    position: absolute;
-    bottom: 80px;
+    height: 600px;
+    width: 600px;
+    overflow-y: scroll;
 }

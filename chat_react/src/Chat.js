@@ -8,10 +8,16 @@ const RenderMessages = (messages) => {
 
     let messageRows = [];
     for (let msg of messages) {
-        messageRows.push(<div className="chat-message-item">{msg.userName + ': ' + msg.message}</div>);
+        messageRows.push(<div id="chatPane" className="chat-message-item">{msg.userName + ': ' + msg.message}</div>);
     }
 
-    return <div className="chat-massages-pane">{messageRows}</div>;
+    let objDiv = document.getElementById("chatPane");
+    if (objDiv)
+    {
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+    return <div id="chatPane" className="chat-massages-pane">{messageRows}</div>;
 };
 
 const Chat = ({onMessageChange, currentMessage, onSendClick, messages, errorText}) => {
