@@ -29,3 +29,11 @@ body, html {
     width: 600px;
     overflow-y: scroll;
 }
+
+.chat-message-item {
+    margin-bottom: 10px;
+}
+
+.send-button {
+    margin-top: 5px;
+}
