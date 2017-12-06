@@ -7,7 +7,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
     <MuiThemeProvider>
-    <Spachat />
+        <Spachat/>
     </MuiThemeProvider>,
     document.getElementById('root'));
 registerServiceWorker();

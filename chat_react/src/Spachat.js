@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Auth from './Auth';
 import Chat from './Chat';
-import Profile from './Profile';
 import ChatTransport from './ChatTransport';
 import Paper from 'material-ui/Paper'
 import AppBar from 'material-ui/AppBar'
@@ -9,14 +8,12 @@ import './App.css'
 
 const ViewEnum = {
     AUTH: 0,
-    CHAT: 1,
-    PROFILE: 2
+    CHAT: 1
 };
 
 class Spachat extends Component {
 
-    constructor()
-    {
+    constructor() {
         super();
         /**
          * @type {{currentUserData: {userName: string}, messages: {userName: string, message: string}[], currentView: int}}
@@ -28,8 +25,13 @@ class Spachat extends Component {
             errorText: ''
         };
 
-        this.chatTransport = new ChatTransport(function(messageData) {
-            this.setState({messages: [...this.state.messages, {userName: messageData.userName, message: messageData.message}]});
+        this.chatTransport = new ChatTransport(function (messageData) {
+            this.setState({
+                messages: [...this.state.messages, {
+                    userName: messageData.userName,
+                    message: messageData.message
+                }]
+            });
         }.bind(this));
 
         this.handleUserNameInput = this.handleUserNameInput.bind(this);
@@ -38,50 +40,46 @@ class Spachat extends Component {
         this.handleSendClicked = this.handleSendClicked.bind(this);
     }
 
-    handleUserNameInput(event)
-    {
-        this.setState({currentUserData: {userName: event.target.value, message: this.state.currentUserData.message}, errorText: ''});
+    handleUserNameInput(event) {
+        this.setState({
+            currentUserData: {userName: event.target.value, message: this.state.currentUserData.message},
+            errorText: ''
+        });
     }
 
-    handleMessageInput(event)
-    {
-        this.setState({currentUserData: {userName: this.state.currentUserData.userName, message: event.target.value}, errorText: ''});
+    handleMessageInput(event) {
+        this.setState({
+            currentUserData: {userName: this.state.currentUserData.userName, message: event.target.value},
+            errorText: ''
+        });
     }
 
-    handleLoginButtonClicked()
-    {
+    handleLoginButtonClicked() {
         let name = this.state.currentUserData.userName;
-        if (name !== '')
-        {
+        if (name !== '') {
             this.setState({currentView: ViewEnum.CHAT, errorText: ''});
-        }
-        else
-        {
+        } else {
             this.setState({errorText: 'Error: empty name!'});
         }
     }
 
-    handleSendClicked()
-    {
-        if (this.state.currentUserData.message !== '')
-        {
+    handleSendClicked() {
+        if (this.state.currentUserData.message !== '') {
             this.chatTransport.publish(this.state.currentUserData);
             this.setState({currentUserData: {...this.state.currentUserData, message: ''}, errorText: ''});
-        }
-        else
-        {
+        } else {
             this.setState({errorText: 'Error: empty message!'});
         }
     }
 
     renderChat = () => (
-    <Chat {...{
-        onMessageChange: this.handleMessageInput,
-        currentMessage: this.state.currentUserData.message,
-        onSendClick: this.handleSendClicked,
-        messages: this.state.messages,
-        errorText: this.state.errorText
-    }} />);
+        <Chat {...{
+            onMessageChange: this.handleMessageInput,
+            currentMessage: this.state.currentUserData.message,
+            onSendClick: this.handleSendClicked,
+            messages: this.state.messages,
+            errorText: this.state.errorText
+        }} />);
 
     renderAuth = () => (
         <Auth
@@ -92,12 +90,9 @@ class Spachat extends Component {
         />
     );
 
-    renderProfile = () => (<Profile />);
-
     getView = (viewId) => (
         ((viewId === ViewEnum.AUTH) && this.renderAuth()) ||
-        ((viewId === ViewEnum.CHAT) && this.renderChat()) ||
-        ((viewId === ViewEnum.PROFILE) && this.renderProfile())
+        ((viewId === ViewEnum.CHAT) && this.renderChat())
     );
 
     render() {

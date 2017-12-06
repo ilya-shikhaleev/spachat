@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton'
 
-const NameField = ({onChange, userName, errorText}) => <TextField errorText={errorText} onChange={(e) => onChange(e)} type="text" value={userName} />;
-const LoginButton = ({onClick}) => <RaisedButton className="login-button" onClick={(e) => onClick()} label='Enter chat'/>;
+const NameField = ({onChange, userName, errorText}) =>
+    <TextField errorText={errorText} onChange={(e) => onChange(e)} type="text" value={userName}/>;
+const LoginButton = ({onClick}) =>
+    <RaisedButton className="login-button" onClick={(e) => onClick()} label='Enter chat'/>;
 const Auth = ({onNameChange, userName, onLoginClick, errorText}) => (
     <div className="auth">
         <div>

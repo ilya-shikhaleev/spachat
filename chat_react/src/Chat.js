@@ -2,8 +2,13 @@ import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton'
 
-const MessageField = ({onChange, message, errorText}) => <TextField errorText={errorText} className="message-text" onChange={(e) => onChange(e)} value={message} fullWidth={true} />;
-const SendButton = ({onClick}) => <RaisedButton className="send-button" onClick={(e) => onClick()} label="Send message" />;
+const MessageField = ({onChange, message, errorText}) =>
+    <TextField errorText={errorText} className="message-text"
+               onChange={(e) => onChange(e)} value={message}
+               fullWidth={true}/>;
+const SendButton = ({onClick}) =>
+    <RaisedButton className="send-button" onClick={(e) => onClick()}
+                  label="Send message"/>;
 const RenderMessages = (messages) => {
 
     let messageRows = [];
@@ -12,8 +17,7 @@ const RenderMessages = (messages) => {
     }
 
     let objDiv = document.getElementById("chatPane");
-    if (objDiv)
-    {
+    if (objDiv) {
         objDiv.scrollTop = objDiv.scrollHeight;
     }
 
@@ -22,13 +26,14 @@ const RenderMessages = (messages) => {
 
 const Chat = ({onMessageChange, currentMessage, onSendClick, messages, errorText}) => {
     return (
-    <div className="chat">
-        {RenderMessages(messages)}
-        <div className="chat-input-form">
-            <MessageField errorText={errorText} onChange={onMessageChange} message={currentMessage} />
-            <SendButton onClick={onSendClick} />
+        <div className="chat">
+            {RenderMessages(messages)}
+            <div className="chat-input-form">
+                <MessageField errorText={errorText} onChange={onMessageChange} message={currentMessage}/>
+                <SendButton onClick={onSendClick}/>
+            </div>
         </div>
-    </div>
-)};
+    )
+};
 
 export default Chat;

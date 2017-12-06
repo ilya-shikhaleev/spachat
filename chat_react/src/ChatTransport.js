@@ -7,34 +7,34 @@ class ChatTransport {
 
         let that = this;
         Axios.get('http://spachat.local/index.php')
-        .then(function (response) {
-            let centrifugeConf = response.data;
-            let centrifuge = new Centrifuge({
-                url: centrifugeConf.centrifugoUrl,
-                user: centrifugeConf.userId,
-                timestamp: centrifugeConf.timestamp,
-                token: centrifugeConf.token,
-                debug: true
-            });
+            .then(function (response) {
+                let centrifugeConf = response.data;
+                let centrifuge = new Centrifuge({
+                    url: centrifugeConf.centrifugoUrl,
+                    user: centrifugeConf.userId,
+                    timestamp: centrifugeConf.timestamp,
+                    token: centrifugeConf.token,
+                    debug: true
+                });
 
-            that.subscription = centrifuge.subscribe("messages-broadcasting", function(message) {
-                onMessageReceivedCallback(message.data);
-            });
+                that.subscription = centrifuge.subscribe("messages-broadcasting", function (message) {
+                    onMessageReceivedCallback(message.data);
+                });
 
-            centrifuge.on('connect', function(context) {
-                console.log(context);
+                centrifuge.on('connect', function (context) {
+                    console.log(context);
+                });
+                centrifuge.connect();
+            })
+            .catch(function (error) {
+                console.log(error);
             });
-            centrifuge.connect();
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
     }
 
     publish(message) {
-        this.subscription.publish(message).then(function() {
+        this.subscription.publish(message).then(function () {
             // success ack from Centrifugo received
-        }, function(err) {
+        }, function (err) {
             // publish call failed with error
         });
     }
